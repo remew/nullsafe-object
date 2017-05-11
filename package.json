@@ -11,6 +11,10 @@
   },
   "homepage": "https://github.com/remew/nullsafe-object#readme",
   "devDependencies": {
+    "ava": "^0.19.1",
     "eslint": "^3.19.0"
+  },
+  "scripts": {
+    "test": "ava"
   }
 }
