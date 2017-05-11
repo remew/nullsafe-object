@@ -9,5 +9,8 @@
   "bugs": {
     "url": "https://github.com/remew/nullsafe-object/issues"
   },
-  "homepage": "https://github.com/remew/nullsafe-object#readme"
+  "homepage": "https://github.com/remew/nullsafe-object#readme",
+  "devDependencies": {
+    "eslint": "^3.19.0"
+  }
 }
