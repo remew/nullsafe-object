@@ -7,7 +7,7 @@ const srcObj = {
 test('accessible not exists key', t => {
     const obj = NullSafeObject.create(srcObj);
 
-    // obj.key;
-    // obj.deep.property.access;
+    t.truthy(obj.key);
+    t.truthy(obj.deep.property.access);
 });
 
