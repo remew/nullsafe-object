@@ -12,7 +12,7 @@ Uncaught TypeError: Cannot read property 'info' of undefined`
 if you use this library, you can access to deep property without above error.
 
 ## Example
-```
+```javascript
 const NullSafeObject = require('nullsafe-object');
 const obj = {};
 
