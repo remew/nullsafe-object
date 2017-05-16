@@ -6,7 +6,7 @@ Create null safe property accessible Object library for JavaScript
 
 if you want to use some Web API and the API return deep json. you try to access into deep property like `res.data.info.id`. however sometime Developer Console shows an error like this.
 ```
-Uncaught TypeError: Cannot read property 'info' of undefined`
+Uncaught TypeError: Cannot read property 'info' of undefined
 ```
 
 if you use this library, you can access to deep property without above error.
