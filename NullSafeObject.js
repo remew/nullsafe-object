@@ -55,7 +55,9 @@ class NullSafeObject {
 
                 // return wrapped null if return value is null or undefined
                 if (ret === null || ret === undefined) {
-                    return NullSafeObject.wrap(null);
+                    // when access to undefined property
+                    value[key] = {};
+                    return NullSafeObject.wrap(value[key]);
                 }
 
                 // re-wrap return value
