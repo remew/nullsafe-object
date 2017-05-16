@@ -65,4 +65,9 @@ test('Grow new property in source object when set new property to wrapped object
     obj.new_property = 'created';
     t.is(srcObj.new_property, 'created');
 });
+test('Grow new deep property in source object when set new deep property to wrapped object', t => {
+    const obj = NullSafeObject.wrap(srcObj);
+    obj.new_deep.property = 'created';
+    t.is(srcObj.new_deep.property, 'created');
+});
 
