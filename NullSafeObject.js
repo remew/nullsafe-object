@@ -2,75 +2,59 @@
 
 const Null = {};
 
+function wrap(obj, path) {
+    return new Proxy(new NullSafeObject(obj, path), {
+        get: function (target, key) {
+            // _value and unwrap is property of NullSafeObject
+            if (key === '_root' ||
+                key === '_path' ||
+                key === 'unwrap') {
+                return Reflect.get(target, key);
+            }
+            return wrap(obj, [...path, key]);
+        },
+        set: function (target, key, value) {
+            const root = Reflect.get(target, '_root');
+            const path = [...Reflect.get(target, '_path'), key];
+            let current = root;
+            // console.log(root);
+            for (let i = 0; i < path.length - 1; i++) {
+                let next = current[path[i]];
+                if (next === null || next === undefined) {
+                    next = current[path[i]] = {};
+                }
+                current = next;
+            }
+            current[path[path.length - 1]] = value;
+            return true;
+        }
+    });
+}
+
 class NullSafeObject {
-    constructor(value) {
-        this._value = value;
+    constructor(obj, path = []) {
+        this._root = obj;
+        this._path = path;
     }
     unwrap() {
-        const value = Reflect.get(this, '_value');
-        if (value === null || value === undefined) {
-            return null;
+        const root = Reflect.get(this, '_root');
+        const path = Reflect.get(this, '_path');
+        let current = root;
+        for (let i = 0; i < path.length; i++) {
+            const next = current[path[i]];
+            if (next === null || next === undefined) {
+                return null;
+            }
+            current = next;
         }
-        return value;
+        return current;
     }
     static wrap(...args) {
         if (args.length !== 1) {
             throw new TypeError('only 1 arguments required');
         }
         const obj = args[0];
-        return new Proxy(new NullSafeObject(obj), {
-            get: function (target, key) {
-                // _value and unwrap is property of NullSafeObject
-                if (key === '_value' || key === 'unwrap') {
-                    return Reflect.get(target, key);
-                }
-                const value = target._value;
-                if (value === null || value === undefined) {
-                    return NullSafeObject.wrap(null);
-                }
-
-                // get return value
-                const ret = value[key];
-
-                // not working...
-                /*if (typeof ret === 'function') {
-                    console.log('get function', key);
-                    // console.log(value instanceof Function);
-                    // return value.bind(obj)(str => str.toUpperCase());
-                    return ret;
-                    // return new Proxy(value, {
-                    //     apply: function(target, thisObj, args) {
-                    //         // console.log(target);
-                    //         // console.log(typeof target);
-                    //         // const result = Reflect.apply(target, thisObj, args);
-                    //         const bindedFunc = target.bind(thisObj);
-                    //         console.log(bindedFunc instanceof Function);
-                    //         args.forEach(arg => console.log(arg.toString()));
-                    //         const result = bindedFunc;
-                    //         console.log(result);
-                    //         return result;
-                    //     }
-                    // });
-                }*/
-
-                // return wrapped null if return value is null or undefined
-                if (ret === null || ret === undefined) {
-                    // when access to undefined property
-                    value[key] = {};
-                    return NullSafeObject.wrap(value[key]);
-                }
-
-                // re-wrap return value
-                return NullSafeObject.wrap(ret);
-            },
-            set: function (target, key, value) {
-                if (key === '_value' || key === 'unwrap') {
-                    throw new Error(`Can not assign to ${key}`);
-                }
-                target._value[key] = value;
-                return true;
-            }
-        });
+        return wrap(obj, []);
     }
 }
 
