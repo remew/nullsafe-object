@@ -11,6 +11,13 @@ Uncaught TypeError: Cannot read property 'info' of undefined
 
 if you use this library, you can access to deep property without above error.
 
+## How it works?
+This library using [ECMAScript Proxy](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy).
+
+Proxy object can hook property access. this library's source code is simple. see it.
+
+You can NOT use this library on IE11 because IE11 doesn't have Proxy object. but Edge has it :) [browser support information](http://caniuse.com/#search=proxy)
+
 ## Example
 ```javascript
 const NullSafeObject = require('nullsafe-object');
