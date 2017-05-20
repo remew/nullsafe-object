@@ -60,8 +60,8 @@ test('It can null-safe method chaining', t => {
 });
 test('return source property when access to _value or _path', t => {
     const obj = NullSafeObject.wrap(srcObj);
-    t.is(obj._value, 'value');
-    t.is(obj._path, 'path');
+    t.is(obj._value.unwrap(), 'value');
+    t.is(obj._path.unwrap(), 'path');
 });
 test('Return null when unwrap() method called by undefined property', t => {
     const obj = NullSafeObject.wrap(srcObj);
