@@ -1,7 +1,5 @@
 'use strict';
 
-const Null = {};
-
 const KEY_ROOT = Symbol();
 const KEY_PATH = Symbol();
 
