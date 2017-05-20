@@ -8,6 +8,8 @@ const srcObj = {
             access: true
         }
     },
+    _value: 'value',
+    _path: 'path',
     arr: [
         'apple',
         'banana',
@@ -55,6 +57,11 @@ test('It can null-safe method chaining', t => {
     const obj = NullSafeObject.wrap(srcObj);
     t.deepEqual(obj.arr.map(str => str.toUpperCase()).reverse().unwrap(), ['CHERRY', 'BANANA', 'APPLE']);
     t.is(obj.arr.map(str => str.toUpperCase()).not_found_method().reverse().unwrap(), null);
+});
+test('return source property when access to _value or _path', t => {
+    const obj = NullSafeObject.wrap(srcObj);
+    t.is(obj._value, 'value');
+    t.is(obj._path, 'path');
 });
 test('Return null when unwrap() method called by undefined property', t => {
     const obj = NullSafeObject.wrap(srcObj);
