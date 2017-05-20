@@ -1,6 +1,6 @@
 {
   "name": "nullsafe-object",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Create null safe property accessible Object library for JavaScript",
   "main": "index.js",
   "repository": "https://github.com/remew/nullsafe-object.git",
