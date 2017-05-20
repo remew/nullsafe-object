@@ -2,20 +2,23 @@
 
 const Null = {};
 
+const KEY_ROOT = Symbol();
+const KEY_PATH = Symbol();
+
 function wrap(obj, path) {
     return new Proxy(new NullSafeObject(obj, path), {
         get: function (target, key) {
-            // _value and unwrap is property of NullSafeObject
-            if (key === '_root' ||
-                key === '_path' ||
+            // unwrap is property of NullSafeObject
+            if (key === KEY_ROOT ||
+                key === KEY_PATH ||
                 key === 'unwrap') {
                 return Reflect.get(target, key);
             }
             return wrap(obj, [...path, key]);
         },
         set: function (target, key, value) {
-            const root = Reflect.get(target, '_root');
-            const path = [...Reflect.get(target, '_path'), key];
+            const root = Reflect.get(target, KEY_ROOT);
+            const path = [...Reflect.get(target, KEY_PATH), key];
             let current = root;
             // console.log(root);
             for (let i = 0; i < path.length - 1; i++) {
@@ -33,12 +36,12 @@ function wrap(obj, path) {
 
 class NullSafeObject {
     constructor(obj, path = []) {
-        this._root = obj;
-        this._path = path;
+        this[KEY_ROOT] = obj;
+        this[KEY_PATH] = path;
     }
     unwrap() {
-        const root = Reflect.get(this, '_root');
-        const path = Reflect.get(this, '_path');
+        const root = Reflect.get(this, KEY_ROOT);
+        const path = Reflect.get(this, KEY_PATH);
         let current = root;
         for (let i = 0; i < path.length; i++) {
             const next = current[path[i]];
